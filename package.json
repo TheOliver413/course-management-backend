@@ -1,0 +1,35 @@
+{
+  "name": "course-management-backend",
+  "version": "1.0.0",
+  "description": "Course Management System Backend",
+  "main": "src/index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node src/index.js",
+    "dev": "nodemon src/index.js",
+    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js --coverage",
+    "test:watch": "node --experimental-vm-modules node_modules/jest/bin/jest.js --watch",
+    "seed": "node src/scripts/seed.js",
+    "migrate": "node src/scripts/migrate.js",
+    "test:connection": "node src/scripts/test-connection.js",
+    "setup": "npm install && npm run test:connection && npm run migrate && npm run seed",
+    "drop": "node src/scripts/drop.js"
+  },
+  "dependencies": {
+    "@apollo/server": "^4.10.1",
+    "bcryptjs": "^3.0.3",
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.3",
+    "express": "^5.1.0",
+    "express-validator": "^7.3.1",
+    "graphql": "^16.12.0",
+    "graphql-tag": "^2.12.6",
+    "jsonwebtoken": "^9.0.2",
+    "pg": "^8.16.3"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "nodemon": "^3.0.2",
+    "supertest": "^6.3.3"
+  }
+}
