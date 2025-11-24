@@ -9,12 +9,17 @@ const getDatabaseConfig = () => {
     const databaseUrl = process.env.DATABASE_URL
 
     if (!databaseUrl) {
-        throw new Error("DATABASE_URL no está definido en el archivo .env. Por favor, revise la configuración de su entorno.")
+        throw new Error(
+            "DATABASE_URL no está definido en el archivo .env. Por favor, revise la configuración de su entorno."
+        )
     }
 
     return {
         connectionString: databaseUrl,
-        ssl: process.env.NODE_ENV === "production" ? { rejectUnauthorized: false } : false,
+        ssl: {
+            rejectUnauthorized: false, // necesario para Render y certificados autofirmados
+        },
+        max: 5, // número máximo de conexiones simultáneas
     }
 }
 
@@ -28,9 +33,15 @@ pool.on("connect", () => {
     console.log("[DB] Conectado exitosamente a PostgreSQL")
 })
 
-export const query = (text, params) => {
+export const query = async (text, params) => {
     console.log("[DB Query]", text.substring(0, 50) + "...")
-    return pool.query(text, params)
+    try {
+        const res = await pool.query(text, params)
+        return res
+    } catch (error) {
+        console.error("[DB Query Error]", error)
+        throw error
+    }
 }
 
 export const getClient = async () => {
